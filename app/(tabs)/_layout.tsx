@@ -10,20 +10,21 @@ const TabLayout = () => {
                 tabBarInactiveTintColor: "#f5bcc4ff",
                 tabBarStyle: {
                     backgroundColor: "#e64459",
-                    borderColor: "#e64459"
+                    borderColor: "#e64459",
                 },
                 tabBarLabelStyle: {
-                    fontSize: 12
+                    fontSize: 14
                 },
                 headerStyle: {
                     backgroundColor: '#e64459',
                     shadowOpacity: 0,
                     elevation: 0,
-                    height: 90
+                    height: 90,
                 },
                 headerTintColor: '#fcfdfe',
                 headerTitleStyle: {
                     fontWeight: 'bold',
+                    fontSize: 25,
                 },
                 headerTitleAlign: "center"
             }}

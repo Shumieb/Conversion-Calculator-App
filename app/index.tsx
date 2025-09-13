@@ -38,33 +38,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 10,
     backgroundColor: "#eaebef",
-    marginTop: 25,
+    paddingTop: 25,
     paddingBottom: 20
-  },
-  card: {
-    backgroundColor: "#fcfdfe",
-    width: "100%",
-    paddingHorizontal: 10,
-    paddingVertical: 16,
-    borderRadius: 5,
-    marginBottom: 15,
-    elevation: 4,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center"
-  },
-  link: {
-    color: "#e64459",
-    fontSize: 17,
-    textAlign: "center",
-    fontWeight: "bold",
-  },
-  iconContainer: {
-    backgroundColor: "#e64459",
-    padding: 6,
-    borderRadius: "50%"
-  },
-  extraPadding: {
-    paddingHorizontal: 12
   }
 })
