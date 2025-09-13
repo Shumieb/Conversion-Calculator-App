@@ -7,7 +7,7 @@ const TabLayout = () => {
         <Tabs
             screenOptions={{
                 tabBarActiveTintColor: '#fcfdfe',
-                tabBarInactiveTintColor: "#eaebef",
+                tabBarInactiveTintColor: "#f5bcc4ff",
                 tabBarStyle: {
                     backgroundColor: "#e64459",
                     borderColor: "#e64459"
@@ -31,7 +31,7 @@ const TabLayout = () => {
             <Tabs.Screen
                 name="LengthConversions"
                 options={{
-                    title: "Length Conversions",
+                    title: "Length",
                     tabBarIcon: ({ color, focused }) => (
                         <FontAwesome5
                             name={focused ? 'tape' : 'tape'}
@@ -44,8 +44,7 @@ const TabLayout = () => {
             <Tabs.Screen
                 name="TempConversions"
                 options={{
-                    headerShown: false,
-                    title: "Temperature Conversions",
+                    title: "Temperature",
                     tabBarIcon: ({ color, focused }) => (
                         <FontAwesome5
                             name={focused ? 'thermometer-full' : 'thermometer-empty'}
@@ -58,8 +57,7 @@ const TabLayout = () => {
             <Tabs.Screen
                 name="WeightConversions"
                 options={{
-                    headerShown: false,
-                    title: "Weight Conversions",
+                    title: "Weight",
                     tabBarIcon: ({ color, focused }) => (
                         <MaterialCommunityIcons
                             name={focused ? 'weight' : 'weight'}
