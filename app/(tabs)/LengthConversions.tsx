@@ -42,7 +42,6 @@ const LengthConversions = () => {
         HandleConversion(outputValue, "output")
     }, [valueOutput])
 
-
     // text input change handler
     const HandleTextChange = (val: string) => {
         setInputValue(val);
@@ -97,6 +96,7 @@ const LengthConversions = () => {
                 default:
                     setErrorMsg(`Unable to convert ${val}`)
                     setError(true)
+                    break
             }
         }
     }

@@ -1,47 +1,104 @@
+import { HandlecelsConversions, HandlefahrConversions, HandlekelvConversions } from '@/utils/pageHelpers/TempPageHelpers';
 import { useEffect, useState } from 'react';
 import { Keyboard, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const TempConversions = () => {
-    // dropdown variables
+    // variables
+    const labelData = [
+        { label: 'Celsius', value: 'cels' },
+        { label: 'Kelvin', value: 'kelv' },
+        { label: 'Fahrenheit', value: 'fahr' },
+    ]
+
+    //  state
     const [openInputDropdown, setOpenInputDropdown] = useState(false);
     const [openOutputDropdown, setOpenOutputDropdown] = useState(false);
-    const [valueInput, setValueInput] = useState("apple");
-    const [valueOutput, setValueOutput] = useState("banana");
-    const [itemsInput, setItemsInput] = useState([
-        { label: 'Apple', value: 'apple' },
-        { label: 'Banana', value: 'banana' }
-    ]);
-    const [itemsOutput, setItemsOutput] = useState([
-        { label: 'Apple', value: 'apple' },
-        { label: 'Banana', value: 'banana' }
-    ]);
 
-    // input values
-    const [inputValue, setInputValue] = useState("100");
-    const [outputValue, setOutputValue] = useState("50");
+    // dropdown
+    const [valueInput, setValueInput] = useState("cels");
+    const [valueOutput, setValueOutput] = useState("kelv");
+
+    const [error, setError] = useState(false)
+    const [errorMsg, setErrorMsg] = useState("")
+
+    const [itemsInput, setItemsInput] = useState(labelData);
+    const [itemsOutput, setItemsOutput] = useState(labelData);
+
+    // input
+    const [inputValue, setInputValue] = useState("");
+    const [outputValue, setOutputValue] = useState("");
+
+    // handle conversions
+    //on dropdown change
+    useEffect(() => {
+        HandleConversion(inputValue, "input")
+    }, [valueInput])
 
     useEffect(() => {
+        HandleConversion(outputValue, "output")
+    }, [valueOutput])
 
-    }, [])
+    // text input change handler
+    const HandleTextChange = (val: string) => {
+        setInputValue(val);
+        HandleConversion(val, "input")
+    }
+
+    // conversion
+    const HandleConversion = (val: string, type: string) => {
+
+        if (val.trim().length < 1 || type.trim().length < 1) return
+
+        let numberVal = Number(val);
+        if (!numberVal) {
+            setErrorMsg("Please enter a valid number.")
+            setError(true)
+            return
+        } else {
+
+            let valToEvaluate;
+            let valToSet;
+            let funcToSend;
+
+            if (type == "input") {
+                valToEvaluate = valueInput
+                valToSet = valueOutput
+                funcToSend = setOutputValue
+            } else if (type == "output") {
+                valToEvaluate = valueOutput
+                valToSet = valueInput
+                funcToSend = setInputValue
+            } else {
+                return
+            }
+
+            switch (valToEvaluate) {
+                case "cels":
+                    HandlecelsConversions(val, valToSet, funcToSend, setErrorMsg, setError)
+                    break
+                case "kelv":
+                    HandlekelvConversions(val, valToSet, funcToSend, setErrorMsg, setError)
+                    break
+                case "fahr":
+                    HandlefahrConversions(val, valToSet, funcToSend, setErrorMsg, setError)
+                    break
+                default:
+                    setErrorMsg(`Unable to convert ${val}`)
+                    setError(true)
+                    break
+            }
+        }
+    }
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <SafeAreaView style={styles.container} edges={["left", "right", "bottom"]}>
                 {/* Top Section */}
-                <View style={{ width: "100%", backgroundColor: "#e64459", height: "50%", justifyContent: "center" }}>
+                <View style={styles.topSectContainer}>
                     {/* Dropdown Section */}
-                    <View
-                        style={{
-                            paddingHorizontal: 10,
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            marginHorizontal: "auto",
-                            width: "70%"
-                        }}
-                    >
+                    <View style={styles.dropDownSect}>
                         <DropDownPicker
                             open={openInputDropdown}
                             value={valueInput}
@@ -49,68 +106,31 @@ const TempConversions = () => {
                             setOpen={setOpenInputDropdown}
                             setValue={setValueInput}
                             setItems={setItemsInput}
-                            style={{
-                                backgroundColor: "#e64459",
-                                borderColor: "#e64459"
-                            }}
-                            labelStyle={{
-                                fontWeight: "bold",
-                                color: "#fff",
-                                fontSize: 26,
-
-                            }}
-                            textStyle={{
-                                fontSize: 20,
-                                color: "#e64459",
-                                fontWeight: "bold"
-                            }}
+                            style={{ backgroundColor: "#e64459", borderColor: "#e64459" }}
+                            labelStyle={{ fontWeight: "bold", color: "#fff", fontSize: 26 }}
+                            textStyle={{ fontSize: 20, color: "#e64459", fontWeight: "bold" }}
                         />
                     </View>
 
                     {/* TextInput Section */}
                     <TextInput
-                        style={{
-                            color: "#fff",
-                            fontSize: 26,
-                            width: "65%",
-                            textAlign: "center",
-                            borderRadius: 10,
-                            fontWeight: "bold",
-                            marginHorizontal: "auto",
-                            marginVertical: 10,
-                            borderColor: "#c7c2c2ff",
-                            borderWidth: 1,
-                        }}
+                        style={styles.input}
                         placeholder='50'
                         value={inputValue}
-                        onChangeText={setInputValue}
+                        onChangeText={(val) => HandleTextChange(val)}
                         keyboardType='numeric'
                     />
-                    <Text
-                        style={{
-                            color: "#fff",
-                            fontWeight: "bold",
-                            marginTop: 18,
-                            textAlign: "center"
-                        }}
-                    >tap to change the value</Text>
-
+                    {
+                        (error && errorMsg.trim().length < 1) ?
+                            <Text style={[styles.info, styles.errorLight]}>{errorMsg}</Text> :
+                            <Text style={styles.info}>tap to change the value</Text>
+                    }
                 </View>
 
                 {/* Bottom Section */}
-                <View style={{ width: "100%", height: "50%", justifyContent: "center" }}>
+                <View style={styles.bottomSectContainer}>
                     {/* Dropdown Section */}
-                    <View
-                        style={{
-                            paddingHorizontal: 10,
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            marginTop: 25,
-                            marginHorizontal: "auto",
-                            width: "70%"
-                        }}
-                    >
+                    <View style={styles.dropDownSect}>
                         <DropDownPicker
                             open={openOutputDropdown}
                             value={valueOutput}
@@ -118,41 +138,18 @@ const TempConversions = () => {
                             setOpen={setOpenOutputDropdown}
                             setValue={setValueOutput}
                             setItems={setItemsOutput}
-                            style={{
-                                backgroundColor: "#eaebef",
-                                borderColor: "#eaebef"
-                            }}
-                            labelStyle={{
-                                fontWeight: "bold",
-                                color: "#e64459",
-                                fontSize: 26,
-
-                            }}
-                            textStyle={{
-                                fontSize: 20,
-                                color: "#e64459",
-                                fontWeight: "bold"
-                            }}
+                            style={{ backgroundColor: "#eaebef", borderColor: "#eaebef" }}
+                            labelStyle={{ fontWeight: "bold", color: "#e64459", fontSize: 26 }}
+                            textStyle={{ fontSize: 20, color: "#e64459", fontWeight: "bold" }}
                         />
                     </View>
 
-                    {/* TextInput Section */}
-                    <Text
-                        style={{
-                            color: "#e64459",
-                            fontSize: 26,
-                            width: "65%",
-                            textAlign: "center",
-                            borderRadius: 10,
-                            fontWeight: "bold",
-                            marginHorizontal: "auto",
-                            marginVertical: 10,
-                            borderColor: "#e64459",
-                            borderWidth: 1,
-                            paddingVertical: 10
-                        }}
-                    >{outputValue}</Text>
-
+                    {/* Answer Section */}
+                    <Text style={styles.answerTxt}>{outputValue}</Text>
+                    {
+                        (error && errorMsg.trim().length < 1) &&
+                        <Text style={[styles.info, styles.errorDark]}>{errorMsg}</Text>
+                    }
                 </View>
 
             </SafeAreaView>
@@ -170,4 +167,60 @@ const styles = StyleSheet.create({
         backgroundColor: "#eaebef",
         paddingBottom: 20
     },
+    topSectContainer: {
+        width: "100%",
+        backgroundColor: "#e64459",
+        height: "50%",
+        justifyContent: "center"
+    },
+    dropDownSect: {
+        paddingHorizontal: 10,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        marginHorizontal: "auto",
+        width: "80%"
+    },
+    input: {
+        color: "#fff",
+        fontSize: 26,
+        width: "65%",
+        textAlign: "center",
+        borderRadius: 10,
+        fontWeight: "bold",
+        marginHorizontal: "auto",
+        marginVertical: 10,
+        borderColor: "#c7c2c2ff",
+        borderWidth: 1,
+    },
+    info: {
+        color: "#fff",
+        fontWeight: "bold",
+        marginTop: 18,
+        textAlign: "center"
+    },
+    bottomSectContainer: {
+        width: "100%",
+        height: "50%",
+        justifyContent: "center"
+    },
+    answerTxt: {
+        color: "#e64459",
+        fontSize: 26,
+        width: "65%",
+        textAlign: "center",
+        borderRadius: 10,
+        fontWeight: "bold",
+        marginHorizontal: "auto",
+        marginVertical: 10,
+        borderColor: "#e64459",
+        borderWidth: 1,
+        paddingVertical: 10
+    },
+    errorLight: {
+        color: "#ed9da8ff"
+    },
+    errorDark: {
+        color: "#e64459"
+    }
 })
