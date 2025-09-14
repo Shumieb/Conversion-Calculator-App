@@ -7,11 +7,13 @@ const WeightConversions = () => {
     // dropdown variables
     const [openInputDropdown, setOpenInputDropdown] = useState(false);
     const [openOutputDropdown, setOpenOutputDropdown] = useState(false);
-    const [valueInput, setValueInput] = useState("apple");
+    const [valueInput, setValueInput] = useState("km");
     const [valueOutput, setValueOutput] = useState("banana");
     const [itemsInput, setItemsInput] = useState([
-        { label: 'Apple', value: 'apple' },
-        { label: 'Banana', value: 'banana' }
+        { label: 'Kilometer(s)', value: 'km' },
+        { label: 'Meter(s)', value: 'm' },
+        { label: 'Kilometer(s)', value: 'km' },
+
     ]);
     const [itemsOutput, setItemsOutput] = useState([
         { label: 'Apple', value: 'apple' },
