@@ -1,3 +1,4 @@
+import { HandlegConversions, HandlekgConversions, HandlemgConversions, HandleounceConversions, HandlepoundConversions } from '@/utils/pageHelpers/WeightPageHelpers';
 import { useEffect, useState } from 'react';
 import { Keyboard, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -6,9 +7,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const WeightConversions = () => {
     // variables
     const labelData = [
-        { label: 'Celsius', value: 'cels' },
-        { label: 'Kelvin', value: 'kelv' },
-        { label: 'Fahrenheit', value: 'fahr' },
+        { label: 'Kilogram(s)', value: 'kg' },
+        { label: 'Gram(s)', value: 'g' },
+        { label: 'Miligrams', value: 'mg' },
+        { label: 'Pound(s)', value: 'pound' },
+        { label: 'Ounce', value: 'ounce' },
     ]
 
     //  state
@@ -16,8 +19,8 @@ const WeightConversions = () => {
     const [openOutputDropdown, setOpenOutputDropdown] = useState(false);
 
     // dropdown
-    const [valueInput, setValueInput] = useState("cels");
-    const [valueOutput, setValueOutput] = useState("kelv");
+    const [valueInput, setValueInput] = useState("kg");
+    const [valueOutput, setValueOutput] = useState("g");
 
     const [error, setError] = useState(false)
     const [errorMsg, setErrorMsg] = useState("")
@@ -51,7 +54,11 @@ const WeightConversions = () => {
         if (val.trim().length < 1 || type.trim().length < 1) return
 
         let numberVal = Number(val);
-        if (!numberVal) {
+        if (numberVal && numberVal < 0) {
+            setErrorMsg("Please enter a number greater than 0.")
+            setError(true)
+            return
+        } else if (!numberVal) {
             setErrorMsg("Please enter a valid number.")
             setError(true)
             return
@@ -74,14 +81,20 @@ const WeightConversions = () => {
             }
 
             switch (valToEvaluate) {
-                case "cels":
-                    HandlecelsConversions(val, valToSet, funcToSend, setErrorMsg, setError)
+                case "kg":
+                    HandlekgConversions(val, valToSet, funcToSend, setErrorMsg, setError)
                     break
-                case "kelv":
-                    HandlekelvConversions(val, valToSet, funcToSend, setErrorMsg, setError)
+                case "g":
+                    HandlegConversions(val, valToSet, funcToSend, setErrorMsg, setError)
                     break
-                case "fahr":
-                    HandlefahrConversions(val, valToSet, funcToSend, setErrorMsg, setError)
+                case "mg":
+                    HandlemgConversions(val, valToSet, funcToSend, setErrorMsg, setError)
+                    break
+                case "pound":
+                    HandlepoundConversions(val, valToSet, funcToSend, setErrorMsg, setError)
+                    break
+                case "ounce":
+                    HandleounceConversions(val, valToSet, funcToSend, setErrorMsg, setError)
                     break
                 default:
                     setErrorMsg(`Unable to convert ${val}`)
