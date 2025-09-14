@@ -35,23 +35,19 @@ const LengthConversions = () => {
     // handle conversions
     //on dropdown change
     useEffect(() => {
-        HandleConversion(inputValue, "input")
-    }, [valueInput])
-
-    useEffect(() => {
-        HandleConversion(outputValue, "output")
-    }, [valueOutput])
+        HandleConversion(inputValue)
+    }, [valueInput, valueOutput])
 
     // text input change handler
     const HandleTextChange = (val: string) => {
         setInputValue(val);
-        HandleConversion(val, "input")
+        HandleConversion(val)
     }
 
     // conversion
-    const HandleConversion = (val: string, type: string) => {
+    const HandleConversion = (val: string) => {
 
-        if (val.trim().length < 1 || type.trim().length < 1) return
+        if (val.trim().length < 1) return
 
         let numberVal = Number(val);
         if (numberVal && numberVal < 0) {
@@ -64,21 +60,9 @@ const LengthConversions = () => {
             return
         } else {
 
-            let valToEvaluate;
-            let valToSet;
-            let funcToSend;
-
-            if (type == "input") {
-                valToEvaluate = valueInput
-                valToSet = valueOutput
-                funcToSend = setOutputValue
-            } else if (type == "output") {
-                valToEvaluate = valueOutput
-                valToSet = valueInput
-                funcToSend = setInputValue
-            } else {
-                return
-            }
+            let valToEvaluate = valueInput
+            let valToSet = valueOutput
+            let funcToSend = setOutputValue
 
             switch (valToEvaluate) {
                 case "km":
@@ -124,7 +108,7 @@ const LengthConversions = () => {
                     {/* TextInput Section */}
                     <TextInput
                         style={styles.input}
-                        placeholder='50'
+                        placeholder='0'
                         value={inputValue}
                         onChangeText={(val) => HandleTextChange(val)}
                         keyboardType='numeric'

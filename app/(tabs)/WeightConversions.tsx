@@ -9,7 +9,7 @@ const WeightConversions = () => {
     const labelData = [
         { label: 'Kilogram(s)', value: 'kg' },
         { label: 'Gram(s)', value: 'g' },
-        { label: 'Miligrams', value: 'mg' },
+        { label: 'Miligram(s)', value: 'mg' },
         { label: 'Pound(s)', value: 'pound' },
         { label: 'Ounce', value: 'ounce' },
     ]
@@ -35,23 +35,19 @@ const WeightConversions = () => {
     // handle conversions
     //on dropdown change
     useEffect(() => {
-        HandleConversion(inputValue, "input")
-    }, [valueInput])
-
-    useEffect(() => {
-        HandleConversion(outputValue, "output")
-    }, [valueOutput])
+        HandleConversion(inputValue)
+    }, [valueInput, valueOutput])
 
     // text input change handler
     const HandleTextChange = (val: string) => {
         setInputValue(val);
-        HandleConversion(val, "input")
+        HandleConversion(val)
     }
 
     // conversion
-    const HandleConversion = (val: string, type: string) => {
+    const HandleConversion = (val: string) => {
 
-        if (val.trim().length < 1 || type.trim().length < 1) return
+        if (val.trim().length < 1) return
 
         let numberVal = Number(val);
         if (numberVal && numberVal < 0) {
@@ -64,21 +60,9 @@ const WeightConversions = () => {
             return
         } else {
 
-            let valToEvaluate;
-            let valToSet;
-            let funcToSend;
-
-            if (type == "input") {
-                valToEvaluate = valueInput
-                valToSet = valueOutput
-                funcToSend = setOutputValue
-            } else if (type == "output") {
-                valToEvaluate = valueOutput
-                valToSet = valueInput
-                funcToSend = setInputValue
-            } else {
-                return
-            }
+            let valToEvaluate = valueInput
+            let valToSet = valueOutput
+            let funcToSend = setOutputValue
 
             switch (valToEvaluate) {
                 case "kg":
@@ -128,7 +112,7 @@ const WeightConversions = () => {
                     {/* TextInput Section */}
                     <TextInput
                         style={styles.input}
-                        placeholder='50'
+                        placeholder='0'
                         value={inputValue}
                         onChangeText={(val) => HandleTextChange(val)}
                         keyboardType='numeric'
